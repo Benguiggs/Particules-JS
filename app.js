@@ -41,7 +41,7 @@ function init (){
 
     particlesArray = [];
 
-    const numberOfParticules = (canvas.height * canvas.width) / 9000;
+    const numberOfParticules = (canvas.height * canvas.width) / 7000;
 
     for(let i = 0; i < numberOfParticules; i++) {
         const size = (Math.random()  * 2) + 1
@@ -70,6 +70,39 @@ ctx.clearRect(0,0,innerWidth,innerHeight)
 for(let i = 0; i < particlesArray.length; i++) {
     particlesArray[i].update()
 }
+connect()
+
 requestAnimationFrame(animate)
     }
     animate()
+
+
+    function connect(){
+        
+        for(let i = 0; i < particlesArray.length; i++) {
+
+            for(let j = i + 1; j < particlesArray.length; j++){
+const squareDistanceX = (particlesArray[i].x - particlesArray[j].x) * (particlesArray[i].x - particlesArray[j].x)
+const squareDistanceY = (particlesArray[i].y - particlesArray[j].y) * (particlesArray[i].y - particlesArray[j].y)
+
+const hypothenuse = squareDistanceX + squareDistanceY;
+
+if(hypothenuse < (135 * 135)){
+    ctx.strokeStyle = `rgba(240,240,240,${1 - hypothenuse/ (135*135)})`
+    ctx.lineWidth = 0.4;
+    ctx.beginPath()
+    ctx.moveTo(particlesArray[i].x, particlesArray[i].y)
+    ctx.lineTo(particlesArray[j].x, particlesArray[j].y)
+ctx.stroke()
+              }
+            }
+        }
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    function handleResize(){
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        init();
+    }
