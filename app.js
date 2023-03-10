@@ -3,7 +3,6 @@ const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
 class Particle {
     constructor(x,y,directionX,directionY,size,color){
         this.x = x;
@@ -34,3 +33,43 @@ class Particle {
 
 const particle1 = new Particle(10,10,50,55,2,"#f1f1f1")
 console.log(particle1)
+
+
+let particlesArray;
+
+function init (){
+
+    particlesArray = [];
+
+    const numberOfParticules = (canvas.height * canvas.width) / 9000;
+
+    for(let i = 0; i < numberOfParticules; i++) {
+        const size = (Math.random()  * 2) + 1
+        const x = Math.random() * ((innerWidth - 10) -10 + 1) + 10;
+        const y = Math.random() * ((innerWidth - 10) -10 + 1) + 10;
+
+        const directionX = cleanDirection();
+        const directionY = cleanDirection();
+        particlesArray.push(new Particle(x,y,directionX,directionY,size,"#f1f1f1"))
+    }
+}
+    init()
+
+    function cleanDirection(){
+        const random = Math.trunc(Math.random() * 2)
+        if(random){
+            return (Math.random() * 1) + 0.5;
+        }
+        else {
+            return (Math.random() * -1) - 0.5;
+        }
+    }
+
+    function animate(){
+ctx.clearRect(0,0,innerWidth,innerHeight)
+for(let i = 0; i < particlesArray.length; i++) {
+    particlesArray[i].update()
+}
+requestAnimationFrame(animate)
+    }
+    animate()
